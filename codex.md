@@ -1,0 +1,464 @@
+# Documentação detalhada do projeto
+
+## Visão geral
+
+Este projeto foi criado para uma atividade da matéria de Inteligência Artificial. O objetivo é demonstrar, de forma simples e executável, a diferença prática entre IA supervisionada e IA não supervisionada.
+
+O repositório contém dois exemplos principais:
+
+1. Um exemplo de IA supervisionada, usando classificação de crédito com KNN.
+2. Um exemplo de IA não supervisionada, usando segmentação de clientes com K-Means.
+
+A decisão central do projeto foi evitar dependências externas. Isso significa que não há necessidade de instalar `scikit-learn`, `pandas`, `numpy` ou qualquer outra biblioteca. Essa escolha torna o projeto mais fácil de executar em computadores diferentes, especialmente em contexto acadêmico, onde às vezes o ambiente de execução pode ser limitado.
+
+## Problema resolvido
+
+O problema solicitado foi: criar um exemplo de IA supervisionada e outro exemplo de IA não supervisionada, sem algo muito complexo.
+
+O problema está bem definido porque pede dois paradigmas clássicos de aprendizado de máquina:
+
+- Supervisionado, quando existe uma resposta correta nos dados de treinamento.
+- Não supervisionado, quando não existe uma resposta correta prévia e o algoritmo precisa encontrar padrões sozinho.
+
+Existe uma pequena ambiguidade no pedido original: não foi especificado se os exemplos deveriam usar bibliotecas prontas ou algoritmos implementados manualmente. A escolha feita foi implementar versões simples dos algoritmos em Python puro, porque isso favorece o entendimento conceitual e reduz custo de configuração.
+
+## Decisões técnicas
+
+### Linguagem
+
+A linguagem escolhida foi Python, por ser amplamente usada em Inteligência Artificial, Machine Learning, análise de dados e ensino técnico.
+
+### Dependências
+
+O projeto não usa dependências externas. Essa decisão foi tomada por quatro motivos principais:
+
+- Reduzir a complexidade de instalação.
+- Facilitar a execução em qualquer computador com Python.
+- Tornar o funcionamento dos algoritmos mais transparente.
+- Evitar que o aluno dependa de uma biblioteca sem entender o conceito.
+
+Em um projeto profissional, o uso de bibliotecas como `scikit-learn` seria recomendado para modelos clássicos, pois essas bibliotecas são testadas, otimizadas e mais robustas. Neste projeto acadêmico, a simplicidade didática é mais importante do que performance.
+
+### Organização de arquivos
+
+A estrutura atual é:
+
+```text
+.
+├── Backup/
+│   └── 20_05_2026/
+│       └── README_20_05_2026_15_44_27.md
+├── exemplos/
+│   ├── __init__.py
+│   ├── nao_supervisionado_kmeans_clientes.py
+│   ├── supervisionado_knn_credito.py
+│   └── util_ml.py
+├── .gitignore
+├── LICENSE
+├── README.md
+├── codex.md
+└── main.py
+```
+
+### Arquivo `main.py`
+
+O arquivo `main.py` funciona como ponto de entrada único. Ele importa os dois exemplos e executa ambos em sequência.
+
+Essa decisão melhora a experiência de uso, porque a pessoa avaliadora ou estudante pode rodar apenas:
+
+```bash
+python main.py
+```
+
+E ver os dois exemplos funcionando.
+
+### Pasta `exemplos`
+
+A pasta `exemplos` concentra os códigos relacionados aos modelos. Isso evita misturar scripts de exemplo com arquivos de documentação na raiz do projeto.
+
+### Arquivo `util_ml.py`
+
+O arquivo `exemplos/util_ml.py` contém funções reutilizáveis:
+
+- validação de matriz numérica
+- normalização min-max
+- cálculo de distância euclidiana
+- contagem simples de outliers por IQR
+- impressão de relatório de qualidade dos dados
+
+Essa separação evita duplicação entre o exemplo supervisionado e o não supervisionado. Também melhora manutenção, porque qualquer correção na validação ou normalização precisa ser feita em apenas um lugar.
+
+## IA supervisionada
+
+### Arquivo
+
+`exemplos/supervisionado_knn_credito.py`
+
+### Contexto do exemplo
+
+O exemplo simula uma análise de crédito. Cada cliente possui quatro atributos:
+
+- `renda_mensal`
+- `idade`
+- `score_credito`
+- `divida_atual`
+
+Cada cliente também possui um rótulo:
+
+- `aprovado`
+- `negado`
+
+Esse rótulo é a resposta esperada. Por isso, o problema é supervisionado.
+
+### Algoritmo usado
+
+O algoritmo usado é KNN, ou K vizinhos mais próximos.
+
+O funcionamento básico é:
+
+1. Receber um novo cliente.
+2. Comparar esse cliente com os clientes antigos.
+3. Calcular a distância entre eles.
+4. Escolher os `k` clientes mais parecidos.
+5. Usar votação majoritária para decidir a classe final.
+
+Neste projeto, `k = 3`.
+
+### Por que KNN foi escolhido
+
+KNN foi escolhido porque é simples de explicar e visualizar mentalmente. Ele não exige treinamento complexo. A lógica é parecida com uma comparação por similaridade.
+
+Exemplo prático:
+
+Se um novo cliente se parece mais com três clientes antigos que foram aprovados, o modelo tende a prever `aprovado`. Se ele se parece mais com clientes negados, tende a prever `negado`.
+
+### Normalização
+
+As variáveis possuem escalas muito diferentes. Por exemplo:
+
+- renda mensal pode estar na casa dos milhares
+- idade pode estar na casa das dezenas
+- score de crédito pode estar entre centenas
+- dívida atual também pode estar na casa dos milhares
+
+Se os dados fossem comparados sem normalização, variáveis maiores poderiam dominar o cálculo de distância. Por isso, o projeto usa normalização min-max, colocando os valores em uma escala entre 0 e 1.
+
+Essa é uma decisão técnica importante porque KNN depende diretamente de distância.
+
+### Avaliação
+
+O conjunto de dados fictício é dividido em treino e teste. O modelo faz previsões para os clientes de teste e calcula acurácia.
+
+A acurácia é útil para uma demonstração simples, mas em um ambiente real ela não seria suficiente. Para crédito, também seria importante avaliar:
+
+- falsos positivos, quando o modelo aprova alguém que deveria ser negado
+- falsos negativos, quando o modelo nega alguém que poderia ser aprovado
+- viés contra grupos específicos
+- estabilidade do modelo ao longo do tempo
+- explicabilidade da decisão
+
+### Impacto prático
+
+Em um cenário real, um modelo desse tipo poderia reduzir o tempo gasto em análise manual, priorizar clientes mais prováveis de aprovação e reduzir risco financeiro.
+
+O ganho de eficiência viria da triagem automatizada. A mitigação de risco viria da identificação antecipada de perfis mais arriscados. Porém, por envolver decisão sensível, o modelo precisaria de governança, auditoria e revisão humana.
+
+## IA não supervisionada
+
+### Arquivo
+
+`exemplos/nao_supervisionado_kmeans_clientes.py`
+
+### Contexto do exemplo
+
+O exemplo simula segmentação de clientes. Cada cliente possui três atributos:
+
+- `compras_mes`
+- `gasto_medio_reais`
+- `dias_desde_ultima_compra`
+
+Não existe uma coluna dizendo qual é o segmento do cliente. O algoritmo precisa encontrar grupos parecidos sozinho.
+
+Por isso, o problema é não supervisionado.
+
+### Algoritmo usado
+
+O algoritmo usado é K-Means.
+
+O funcionamento básico é:
+
+1. Escolher uma quantidade de grupos, neste caso `k = 3`.
+2. Definir centroides iniciais.
+3. Atribuir cada cliente ao centroide mais próximo.
+4. Recalcular os centroides com base nos clientes atribuídos.
+5. Repetir o processo até estabilizar ou atingir o limite de iterações.
+
+### Por que K-Means foi escolhido
+
+K-Means foi escolhido porque é um dos algoritmos mais clássicos para agrupamento. Ele é simples o suficiente para uma atividade acadêmica e útil o bastante para representar problemas reais de segmentação.
+
+### Interpretação dos grupos
+
+Depois que o algoritmo encontra os grupos, o código interpreta os centroides aproximados.
+
+Os nomes dos segmentos são inferências, não verdades absolutas. Por exemplo:
+
+- clientes com muitas compras, alto gasto e compra recente podem ser chamados de `alto valor e alta recorrencia`
+- clientes com muito tempo sem comprar podem ser chamados de `risco de abandono`
+- clientes intermediários podem ser chamados de `recorrencia moderada`
+
+Essa etapa é importante porque algoritmos não supervisionados não entregam rótulos prontos. Eles entregam agrupamentos matemáticos. A interpretação de negócio vem depois.
+
+### Normalização
+
+Assim como no KNN, o K-Means usa distância. Como as variáveis possuem escalas diferentes, a normalização min-max também é aplicada aqui.
+
+Sem normalização, `gasto_medio_reais` poderia dominar os agrupamentos, porque seus valores são maiores do que `compras_mes`.
+
+### Impacto prático
+
+Em um cenário real, segmentação de clientes pode melhorar:
+
+- campanhas de marketing
+- personalização de ofertas
+- retenção de clientes
+- priorização de relacionamento
+- alocação de orçamento comercial
+
+Por exemplo, clientes em risco de abandono poderiam receber campanhas de reativação. Clientes de alto valor poderiam receber benefícios de fidelidade. Clientes moderados poderiam receber ações para aumentar frequência ou ticket médio.
+
+## Validação dos dados
+
+Antes de executar os modelos, os scripts validam:
+
+- se a base está vazia
+- se cada linha possui a quantidade correta de colunas
+- se há valores nulos
+- se os valores são numéricos
+- se há valores infinitos ou `NaN`
+- se há valores negativos indevidos
+- se há possíveis outliers pelo método IQR
+
+Essa validação foi incluída porque, em projetos reais, dados ruins levam a modelos ruins. Mesmo em exemplos pequenos, a prática correta é validar antes de modelar.
+
+## Riscos e limitações
+
+### Dados fictícios
+
+Os dados usados são fictícios. Eles servem para estudo e não devem ser usados para decisões reais.
+
+### Tamanho da base
+
+A base é pequena. Isso facilita a leitura, mas limita a robustez estatística.
+
+### Overfitting
+
+No exemplo supervisionado, existe risco de overfitting porque a base é muito pequena. O modelo pode parecer funcionar bem no teste simples, mas não generalizar para clientes reais.
+
+### Data leakage
+
+O projeto evita uma forma comum de data leakage ao calcular os parâmetros de normalização do exemplo supervisionado usando apenas os dados de treino. Depois, os mesmos parâmetros são aplicados no teste.
+
+Em um projeto real, qualquer transformação aprendida nos dados deveria ser ajustada somente no treino.
+
+### Viés
+
+O exemplo de crédito usa variáveis simplificadas e fictícias. Em um ambiente real, seria obrigatório avaliar viés, justiça algorítmica e impacto regulatório.
+
+### Correlação e causalidade
+
+O projeto não tenta provar causalidade. Por exemplo, maior renda pode estar associada a maior chance de aprovação no exemplo, mas isso não significa, sozinho, uma relação causal universal.
+
+### Interpretabilidade
+
+KNN é relativamente interpretável por comparação com vizinhos. K-Means é interpretável pelos centroides. Mesmo assim, em um ambiente real, seria recomendável complementar com análises mais robustas.
+
+## Como executar
+
+Para executar tudo:
+
+```bash
+python main.py
+```
+
+Para executar apenas o exemplo supervisionado:
+
+```bash
+python exemplos/supervisionado_knn_credito.py
+```
+
+Para executar apenas o exemplo não supervisionado:
+
+```bash
+python exemplos/nao_supervisionado_kmeans_clientes.py
+```
+
+## Possíveis melhorias futuras
+
+Algumas melhorias possíveis são:
+
+- adicionar gráficos com Plotly
+- criar testes automatizados
+- adicionar uma versão usando `scikit-learn`
+- comparar métricas como precisão, recall e F1-score no exemplo supervisionado
+- usar uma base CSV externa
+- criar uma pequena interface em terminal
+- gerar relatório em HTML
+- adicionar matriz de confusão
+- testar diferentes valores de `k`
+
+Essas melhorias não foram incluídas agora para manter o projeto simples, como solicitado.
+
+## Registro da mudança
+
+Em 20_05_2026, foram adicionados:
+
+- exemplo supervisionado com KNN
+- exemplo não supervisionado com K-Means
+- funções utilitárias de validação, normalização e distância
+- ponto de entrada `main.py`
+- documentação no `README.md`
+- documentação detalhada neste `codex.md`
+- backup da versão anterior do `README.md`
+
+Também em 20_05_2026, os scripts dentro da pasta `exemplos` receberam fallback de importação. Essa alteração permite executar tanto pelo ponto de entrada principal, usando `python main.py`, quanto diretamente pelos arquivos:
+
+- `python exemplos/supervisionado_knn_credito.py`
+- `python exemplos/nao_supervisionado_kmeans_clientes.py`
+
+Antes dessa alteração, a execução direta dos arquivos falhava porque o Python alterava o caminho base de importação para a própria subpasta `exemplos`. O fallback resolve esse caso sem mudar a organização do projeto.
+
+## Registro da melhoria com bibliotecas
+
+Ainda em 20_05_2026, o projeto foi melhorado para usar bibliotecas reais de Machine Learning e visualização, atendendo ao pedido de deixar a atividade "um pouco mais legal" e depois à preferência explícita por usar alguma biblioteca.
+
+### Problema reformulado
+
+O pedido original era criar um exemplo de IA supervisionada e outro de IA não supervisionada, sem algo muito complexo. A primeira versão resolveu isso usando Python puro. Depois, o pedido foi ajustado para usar biblioteca.
+
+A reformulação mais adequada ficou assim:
+
+Criar dois exemplos didáticos de Inteligência Artificial usando bibliotecas conhecidas, mantendo a execução simples, mas deixando a entrega mais próxima de uma prática real de Machine Learning e mais interessante para apresentação.
+
+### Bibliotecas adicionadas
+
+Foram adicionadas ao `requirements.txt`:
+
+- `scikit-learn==1.8.0`
+- `pandas==3.0.3`
+- `plotly==6.7.0`
+
+Essas versões foram fixadas porque o ambiente local instalou exatamente essas versões. Fixar versões reduz risco de comportamento diferente em outro computador.
+
+### Ambiente virtual
+
+Como o projeto passou a instalar bibliotecas, foi criado um ambiente virtual chamado `venv`, usando:
+
+```bash
+python -m venv venv
+```
+
+Essa decisão segue a regra do projeto de não usar `.venv`. O ambiente virtual isola as dependências e evita interferência com outras instalações Python da máquina.
+
+### Mudança no exemplo supervisionado
+
+O arquivo `exemplos/supervisionado_knn_credito.py` foi refatorado para usar:
+
+- `pandas.DataFrame`, para organizar a base de clientes
+- `train_test_split`, para separar treino e teste
+- `Pipeline`, para encadear pré-processamento e modelo
+- `MinMaxScaler`, para normalizar variáveis numéricas
+- `KNeighborsClassifier`, para classificar clientes
+- `accuracy_score`, para medir acurácia
+- `classification_report`, para disponibilizar métricas adicionais
+- `confusion_matrix`, para gerar a matriz de confusão usada no relatório
+
+Essa mudança é melhor do que a implementação manual porque usa componentes amplamente testados, aproxima o exercício de um fluxo real e reduz risco de erro no algoritmo.
+
+O trade-off é que agora existe dependência de instalação. Para uma atividade simples, isso aumenta um pouco a preparação do ambiente, mas o ganho didático e visual compensa.
+
+### Mudança no exemplo não supervisionado
+
+O arquivo `exemplos/nao_supervisionado_kmeans_clientes.py` foi refatorado para usar:
+
+- `pandas.DataFrame`, para organizar a base de clientes
+- `MinMaxScaler`, para normalizar os dados antes do agrupamento
+- `KMeans`, para encontrar três segmentos
+- `PCA`, para transformar os dados em duas dimensões para visualização
+- `silhouette_score`, para avaliar separação dos grupos
+
+Também foi definido `LOKY_MAX_CPU_COUNT=1` dentro do script, antes de importar componentes do `scikit-learn`. Essa configuração evita um aviso do `joblib` no Windows quando ele não consegue consultar a quantidade de núcleos físicos da máquina. O aviso não impedia a execução, mas deixava a saída poluída e menos profissional para apresentação.
+
+### Relatório HTML interativo
+
+Foi criado o arquivo `gerar_relatorio_html.py`.
+
+Esse script executa os dois fluxos de IA e gera `relatorio_ia.html` com Plotly. O relatório inclui:
+
+- gráfico de dispersão dos clientes por renda e score de crédito
+- tamanho dos pontos representando dívida atual
+- cor dos pontos representando decisão de crédito
+- matriz de confusão do KNN
+- gráfico dos segmentos do K-Means usando PCA
+- gráfico de quantidade de clientes por segmento
+- cards com acurácia, previsão do novo cliente, coeficiente de silhueta e variância preservada pelo PCA
+- leitura rápida separando fato, inferência e opinião técnica
+- explicação de impacto prático
+
+A escolha por HTML foi feita porque facilita apresentação. A pessoa pode rodar o projeto e abrir um arquivo visual, sem precisar criar servidor web, notebook ou dashboard.
+
+### Atualização do ponto de entrada
+
+O arquivo `main.py` passou a:
+
+1. Executar o exemplo supervisionado.
+2. Executar o exemplo não supervisionado.
+3. Gerar o relatório HTML interativo.
+4. Imprimir o caminho absoluto do relatório gerado.
+
+Essa decisão deixa a experiência mais simples, porque um único comando executa tudo:
+
+```bash
+python main.py
+```
+
+### Validação após a melhoria
+
+Foram executados os seguintes comandos com o Python do ambiente virtual:
+
+```bash
+.\venv\Scripts\python main.py
+.\venv\Scripts\python exemplos\supervisionado_knn_credito.py
+.\venv\Scripts\python exemplos\nao_supervisionado_kmeans_clientes.py
+.\venv\Scripts\python gerar_relatorio_html.py
+```
+
+Os comandos executaram corretamente e o relatório `relatorio_ia.html` foi gerado na raiz do projeto.
+
+### Impacto real da melhoria
+
+A melhoria aumenta o valor da entrega em três pontos:
+
+- Apresentação: o relatório visual torna a explicação mais clara para professor e colegas.
+- Proximidade com prática real: `scikit-learn`, `pandas` e `plotly` são ferramentas usadas em projetos reais de análise e Machine Learning.
+- Manutenção: usar bibliotecas testadas reduz a chance de erro em algoritmos implementados manualmente.
+
+### Trade-offs da melhoria
+
+Complexidade: aumentou um pouco porque agora há ambiente virtual e dependências.
+
+Custo de implementação: continua baixo, porque as bibliotecas resolvem partes importantes do fluxo.
+
+Escalabilidade: melhorou, porque `scikit-learn` lida melhor com crescimento de dados do que a implementação manual anterior.
+
+Manutenção: melhorou, porque o código ficou mais alinhado com padrões comuns de projetos de Machine Learning.
+
+Performance: para a base pequena, não faz diferença prática. Para bases maiores, as bibliotecas tendem a ser mais eficientes.
+
+### Limitações restantes
+
+Os dados continuam fictícios e pequenos. Por isso, as métricas não devem ser interpretadas como evidência de modelo pronto para produção.
+
+A acurácia de 100% no exemplo supervisionado é esperada em uma base simples e bem separada. Isso é útil para fins didáticos, mas em produção exigiria validação com base maior, teste temporal, análise de viés, matriz de confusão robusta e monitoramento.
+
+Os segmentos do K-Means continuam sendo inferências. O algoritmo encontra grupos matemáticos, mas os nomes dos perfis são interpretação humana baseada nos centroides.
