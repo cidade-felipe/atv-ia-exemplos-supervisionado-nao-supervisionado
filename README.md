@@ -1,16 +1,18 @@
 # Exemplos de IA supervisionada e não supervisionada
 
-Projeto simples para a matéria de Inteligência Artificial, agora com bibliotecas usadas no mercado:
+Projeto para a matéria de Inteligência Artificial com dois notebooks:
 
-- `scikit-learn` para os modelos de Machine Learning.
-- `pandas` para organizar os dados em tabelas.
-- `plotly` para gerar um relatório HTML interativo.
+- `notebooks/01_ia_supervisionada_credito.ipynb`
+- `notebooks/02_ia_nao_supervisionada_segmentacao.ipynb`
 
-## O que tem no projeto
+A entrega principal agora são os notebooks, porque fica mais fácil explicar em sala: o código, as tabelas, as métricas e os gráficos aparecem no mesmo lugar.
 
-- IA supervisionada: classificação de crédito com KNN.
-- IA não supervisionada: segmentação de clientes com K-Means.
-- Relatório visual: gráficos interativos em `relatorio_ia.html`.
+## Bibliotecas usadas
+
+- `scikit-learn`, para os modelos de Machine Learning.
+- `pandas`, para organizar os dados em tabelas.
+- `plotly`, para gráficos interativos dentro dos notebooks.
+- `ipykernel` e `nbformat`, para facilitar a execução dos notebooks no ambiente virtual.
 
 ## Como preparar o ambiente
 
@@ -32,62 +34,52 @@ Instale as dependências:
 pip install -r requirements.txt
 ```
 
-## Como executar
+## Como usar
 
-Para rodar tudo e gerar o relatório:
+Abra um notebook por vez:
+
+```text
+notebooks/01_ia_supervisionada_credito.ipynb
+notebooks/02_ia_nao_supervisionada_segmentacao.ipynb
+```
+
+Depois execute as células de cima para baixo.
+
+Se quiser rodar os exemplos pelo terminal, use:
 
 ```bash
 python main.py
 ```
 
-Para rodar apenas o exemplo supervisionado:
+## Notebook 1, IA supervisionada
 
-```bash
-python exemplos/supervisionado_knn_credito.py
-```
+Arquivo: `notebooks/01_ia_supervisionada_credito.ipynb`
 
-Para rodar apenas o exemplo não supervisionado:
-
-```bash
-python exemplos/nao_supervisionado_kmeans_clientes.py
-```
-
-Para gerar somente o relatório HTML:
-
-```bash
-python gerar_relatorio_html.py
-```
-
-Depois, abra o arquivo:
-
-```text
-relatorio_ia.html
-```
-
-## Exemplo 1, IA supervisionada
-
-Arquivo: `exemplos/supervisionado_knn_credito.py`
-
-O exemplo usa uma base fictícia de clientes com:
+O exemplo usa uma base fictícia de crédito com:
 
 - renda mensal
 - idade
 - score de crédito
 - dívida atual
-- decisão conhecida, `aprovado` ou `negado`
+- decisão de crédito, `aprovado` ou `negado`
 
-Como já existe uma resposta correta para cada cliente, o modelo consegue aprender com exemplos anteriores. Por isso é IA supervisionada.
+Fato: existe uma resposta correta na base, a coluna `decisao_credito`.
 
-Algoritmo usado:
+Por isso, o modelo é supervisionado.
+
+O notebook usa:
 
 - `MinMaxScaler`, para normalizar os dados.
-- `KNeighborsClassifier`, para classificar o novo cliente.
+- `KNeighborsClassifier`, para classificar o cliente.
+- `accuracy_score`, para medir acurácia.
+- `confusion_matrix`, para montar a matriz de confusão.
+- `plotly`, para mostrar os gráficos no próprio notebook.
 
-Impacto prático: esse tipo de modelo pode ajudar a priorizar análise de crédito, reduzir trabalho manual e mitigar risco de inadimplência. Em produção, ele precisaria de governança, auditoria, monitoramento e avaliação de viés.
+Impacto prático: esse tipo de solução pode ajudar a reduzir análise manual de crédito, acelerar triagem e mitigar risco de inadimplência. Em produção, precisaria de auditoria, análise de viés e regras de governança.
 
-## Exemplo 2, IA não supervisionada
+## Notebook 2, IA não supervisionada
 
-Arquivo: `exemplos/nao_supervisionado_kmeans_clientes.py`
+Arquivo: `notebooks/02_ia_nao_supervisionada_segmentacao.ipynb`
 
 O exemplo usa uma base fictícia de clientes com:
 
@@ -95,34 +87,24 @@ O exemplo usa uma base fictícia de clientes com:
 - gasto médio
 - dias desde a última compra
 
-Não existe uma coluna dizendo qual é o segmento de cada cliente. O modelo encontra grupos parecidos sozinho. Por isso é IA não supervisionada.
+Fato: não existe uma coluna dizendo o segmento do cliente.
 
-Algoritmo usado:
+Por isso, o modelo é não supervisionado.
+
+O notebook usa:
 
 - `MinMaxScaler`, para normalizar os dados.
-- `KMeans`, para agrupar clientes.
-- `PCA`, para reduzir os dados para duas dimensões e permitir visualização.
-- `silhouette_score`, para medir se os grupos ficaram razoavelmente separados.
+- `KMeans`, para agrupar clientes parecidos.
+- `PCA`, para visualizar os grupos em duas dimensões.
+- `silhouette_score`, para avaliar se os grupos ficaram razoavelmente separados.
+- `plotly`, para mostrar os gráficos no próprio notebook.
 
-Impacto prático: esse tipo de solução pode ajudar em campanhas mais direcionadas, recuperação de clientes em risco e melhor uso do orçamento de marketing.
-
-## Relatório visual
-
-Arquivo gerado: `relatorio_ia.html`
-
-O relatório mostra:
-
-- gráfico dos clientes por renda, score e decisão de crédito
-- matriz de confusão do KNN
-- visualização dos segmentos com PCA
-- distribuição de clientes por segmento
-- métricas principais em cards
-- leitura rápida com fato, inferência e opinião técnica
+Impacto prático: esse tipo de solução ajuda em campanhas mais direcionadas, recuperação de clientes em risco e melhor uso do orçamento de marketing.
 
 ## Observações importantes
 
-Fato: os dados usados aqui são fictícios e servem apenas para estudo.
+Fato: os dados são fictícios e servem apenas para estudo.
 
 Inferência: os nomes dos segmentos do K-Means são interpretações feitas depois que o algoritmo encontra os grupos.
 
-Opinião técnica: usar `scikit-learn` deixa o projeto mais próximo de uma prática real de Machine Learning, sem deixar o código pesado demais para uma atividade acadêmica.
+Opinião técnica: notebooks são a melhor escolha para apresentar esse trabalho em pouco tempo, porque evitam alternar entre terminal, script e HTML separado.

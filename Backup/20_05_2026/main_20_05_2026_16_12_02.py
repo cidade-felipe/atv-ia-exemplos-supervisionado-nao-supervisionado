@@ -1,13 +1,13 @@
 from exemplos.nao_supervisionado_kmeans_clientes import executar_exemplo as executar_nao_supervisionado
 from exemplos.supervisionado_knn_credito import executar_exemplo as executar_supervisionado
+from gerar_relatorio_html import gerar_relatorio_html
 
 
 def main() -> None:
     executar_supervisionado()
     executar_nao_supervisionado()
-    print('\nPara a apresentação, abra os notebooks:')
-    print('- notebooks/01_ia_supervisionada_credito.ipynb')
-    print('- notebooks/02_ia_nao_supervisionada_segmentacao.ipynb')
+    caminho_relatorio = gerar_relatorio_html()
+    print(f'\nRelatorio interativo gerado em: {caminho_relatorio}')
 
 
 if __name__ == '__main__':
